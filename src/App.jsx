@@ -14,6 +14,7 @@ function App() {
             Without the Hassle
           </h1>
           <Search searchValue={searchValue} setSearchValue={setSearchValue}/>
+          <h1 className="text-white">{searchValue}</h1>
         </header>
       </div>
     </main>
