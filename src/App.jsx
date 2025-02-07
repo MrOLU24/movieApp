@@ -1,13 +1,14 @@
-import React from "react"
+import React from "react";
 
 function App() {
-
   return (
-    <>
-    
-    <h1>hello</h1>
-    </>
-  )
+    <main>
+      <div className="pattern" />
+      <div className="wrapper">
+        <h1>Find <span className="text-gradient">Movies</span> You’ll Love Without the Hassle</h1>
+      </div>
+    </main>
+  );
 }
 
-export default App
+export default App;
