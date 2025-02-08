@@ -14,21 +14,36 @@ const API_OPTIONS = {
 
 const App = () => {
   const [searchValue, setsearchValue] = useState("");
-const [errorMessage, setErrorMessage] = useState('');
-
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const fetchMovies = async () => {
-    try{
-    
-
-    }catch(error){
+    setIsLoading(true);
+    setErrorMessage("");
+    try {
+      const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+      const response = await fetch(endpoint, API_OPTIONS);
+      if (!response.ok) {
+        throw new Error("Failed to fetch movies");
+      }
+      const data = await response.json();
+      if (data.response === "False") {
+        setErrorMessage(data.Error || "Error fetching movies");
+        setMovies([]);
+        return;
+      }
+      setMovies(data.results || []);
+    } catch (error) {
       console.error(`Error fetching movies: ${error}`);
-      setErrorMessage('Error fetching movies, please try again later.');
+      setErrorMessage("Error fetching movies, please try again later.");
+    } finally {
+      setIsLoading(false);
     }
-  }
-  // useEffect(()=>{
+  };
+  useEffect(() => {
+    fetchMovies();
+  }, []);
 
-  // }, deps[])
   return (
     <main>
       <div className="pattern" />
@@ -44,7 +59,17 @@ const [errorMessage, setErrorMessage] = useState('');
         </header>
         <section>
           <h2>All Movies</h2>
-          {errorMessage && <p className="text-red-700">{errorMessage}</p>}
+          {isLoading ? (
+            <p className="text-white">Loading...</p>
+          ) : errorMessage ? (
+            <p>{errorMessage}</p>
+          ) : (
+            <ul>
+              {movies.map((movie) => (
+                <p className="text-white">{movie.title}</p>
+              ))}
+            </ul>
+          )}
         </section>
       </div>
     </main>
