@@ -25,7 +25,7 @@ const App = () => {
     setErrorMessage("");
     try {
       const endpoint = query
-        ? `${API_BASE_URL}/search/movie?query=${encodeURI}`
+        ? `${API_BASE_URL}/search/movie?query=${encodeURI(query)}`
         : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
       const response = await fetch(endpoint, API_OPTIONS);
       if (!response.ok) {
@@ -60,7 +60,6 @@ const App = () => {
             Without the Hassle
           </h1>
           <Search searchValue={searchValue} setsearchValue={setsearchValue} />
-          <h1 className="text-white">{searchValue}</h1>
         </header>
         <section className="all-movies">
           <h2 className="mt-[40px]">All Movies</h2>
