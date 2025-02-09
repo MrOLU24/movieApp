@@ -17,7 +17,7 @@ const App = () => {
   const [searchValue, setsearchValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const fetchMovies = async () => {
     setIsLoading(true);
     setErrorMessage("");
@@ -38,7 +38,7 @@ const App = () => {
       console.error(`Error fetching movies: ${error}`);
       setErrorMessage("Error fetching movies, please try again later.");
     } finally {
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -58,8 +58,8 @@ const App = () => {
           <Search searchValue={searchValue} setsearchValue={setsearchValue} />
           <h1 className="text-white">{searchValue}</h1>
         </header>
-        <section>
-          <h2>All Movies</h2>
+        <section className="all-movies">
+          <h2 className="mt-[40px]">All Movies</h2>
           {isLoading ? (
            <LoadingSpinner/>
           ) : errorMessage ? (
