@@ -22,7 +22,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [debounceSearchvalue, setdebounceSearchvalue] = useState("");
 
-  useDebounce(()=> setdebounceSearchvalue(searchValue), 500. [searchValue]);
+  useDebounce(()=> setdebounceSearchvalue(searchValue), 500, [searchValue]);
 
   const fetchMovies = async (query = "") => {
     setIsLoading(true);
