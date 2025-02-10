@@ -2,19 +2,26 @@ import { Client, Databases, ID, Query } from "appwrite";
 
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
-const COLLECTION_ID = import.meta.env.VITE_APPWRTIE_COLLECTTION_ID;
+const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID; // Fixed typo
+
+// Ensure required environment variables are defined
+if (!PROJECT_ID || !DATABASE_ID || !COLLECTION_ID) {
+  console.error("Missing Appwrite environment variables.");
+}
 
 const client = new Client();
 client.setEndpoint("https://cloud.appwrite.io/v1");
 client.setProject(PROJECT_ID);
 
 const database = new Databases(client);
+
 export const updateSearchCount = async (searchValue, movie) => {
   try {
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
       Query.equal("searchValue", searchValue),
     ]);
-    if (result.documents.length > 0) {
+
+    if (result?.documents?.length > 0) {  // Added safe checks
       const doc = result.documents[0];
       await database.updateDocument(DATABASE_ID, COLLECTION_ID, doc.$id, {
         count: (doc.count ?? 0) + 1,
@@ -28,7 +35,7 @@ export const updateSearchCount = async (searchValue, movie) => {
       });
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error updating search count:", error);
   }
 };
 
@@ -38,8 +45,10 @@ export const getTrendingMovies = async () => {
       Query.limit(5),
       Query.orderDesc("count"),
     ]);
-    return result.documents;
+
+    return result?.documents ?? []; // Ensure function always returns an array
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching trending movies:", error);
+    return [];
   }
 };
