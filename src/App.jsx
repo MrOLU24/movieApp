@@ -21,9 +21,9 @@ const App = () => {
   const [searchValue, setsearchValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [movies, setMovies] = useState([]);
-  const [trendingMovies, settrendingMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [debounceSearchvalue, setdebounceSearchvalue] = useState("");
+  const [trendingMovies, settrendingMovies] = useState([]);
 
   useDebounce(() => setdebounceSearchvalue(searchValue), 500, [searchValue]);
 
@@ -90,6 +90,7 @@ const App = () => {
               {trendingMovies.map((movie, index) => (
                 <li key={movie.$id}>
                   <p>{index + 1}</p>
+                  <img src={movie.poster_url} alt={movie.title}/>
                 </li>
               ))}
             </ul>
