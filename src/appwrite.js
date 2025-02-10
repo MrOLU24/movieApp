@@ -3,6 +3,8 @@ import { Client, Databases, ID, Query } from "appwrite";
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID; // Fixed typo
+console.log({ DATABASE_ID, COLLECTION_ID, PROJECT_ID });
+
 
 // Ensure required environment variables are defined
 if (!PROJECT_ID || !DATABASE_ID || !COLLECTION_ID) {
