@@ -5,6 +5,7 @@ import LoadingSpinner from "./Components/LoadingSpinner";
 import MovieCard from "./Components/Moviecard";
 import { useDebounce } from "react-use";
 import { updateSearchCount } from "./appwrite";
+import { getTrendingMovies } from "./appwrite";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -20,6 +21,7 @@ const App = () => {
   const [searchValue, setsearchValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [movies, setMovies] = useState([]);
+  const [trendingMovies, settrendingMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [debounceSearchvalue, setdebounceSearchvalue] = useState("");
 
@@ -43,9 +45,9 @@ const App = () => {
         return;
       }
       setMovies(data.results || []);
-     if(query && data.results.length > 0){
-      await updateSearchCount(query, data.results[0]);
-     }
+      if (query && data.results.length > 0) {
+        await updateSearchCount(query, data.results[0]);
+      }
     } catch (error) {
       console.error(`Error fetching movies: ${error}`);
       setErrorMessage("Error fetching movies, please try again later.");
@@ -53,9 +55,21 @@ const App = () => {
       setIsLoading(false);
     }
   };
+  const LoadTrendingMovies = async () => {
+    try {
+      const movies = await getTrendingMovies();
+      settrendingMovies(movies);
+    } catch (error) {
+      console.error(`Error fetching trending movies: ${error}`);
+    }
+  };
   useEffect(() => {
-    fetchMovies(searchValue);
-  }, [searchValue]);
+    fetchMovies(debounceSearchvalue);
+  }, [debounceSearchvalue]);
+
+  useEffect(() => {
+    LoadTrendingMovies();
+  }, []);
 
   return (
     <main>
@@ -70,7 +84,7 @@ const App = () => {
           <Search searchValue={searchValue} setsearchValue={setsearchValue} />
         </header>
         <section className="all-movies">
-          <h2 className="mt-[40px]">All Movies</h2>
+          <h2>All Movies</h2>
           {isLoading ? (
             <LoadingSpinner />
           ) : errorMessage ? (
