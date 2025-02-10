@@ -83,6 +83,18 @@ const App = () => {
           </h1>
           <Search searchValue={searchValue} setsearchValue={setsearchValue} />
         </header>
+        {trendingMovies.length > 0 && (
+          <section className="trending">
+            <h2> Trending Movies</h2>
+            <ul>
+              {trendingMovies.map((movie, index) => (
+                <li key={movie.$id}>
+                  <p>{index + 1}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
         <section className="all-movies">
           <h2>All Movies</h2>
           {isLoading ? (
